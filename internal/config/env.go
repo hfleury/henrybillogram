@@ -8,8 +8,14 @@ import (
 
 func SetEnv() (map[string]string, error) {
 	runEnv := os.Getenv("BILLO_ENVIRONMENT")
-	if runEnv != "" && runEnv == "LOCAL" {
+	// if local env get the env vars from .env file
+	if runEnv == "" || runEnv == "LOCAL" {
 		err := godotenv.Load(".env")
+		if err != nil {
+			return nil, err
+		}
+	} else if runEnv == "TEST" {
+		err := godotenv.Load("../../.env")
 		if err != nil {
 			return nil, err
 		}

@@ -5,13 +5,13 @@ import (
 	"github.com/hfleury/henrybillogram/internal/config"
 )
 
-type AppDiscount struct {
+type AppBillogram struct {
 	EnvVars   map[string]string
 	GinEngine *gin.Engine
 }
 
-func NewApp() (*AppDiscount, error) {
-	app := &AppDiscount{}
+func NewAppBillogram() (*AppBillogram, error) {
+	app := &AppBillogram{}
 	err := new(error)
 	app.EnvVars, *err = config.SetEnv()
 	app.GinEngine = gin.Default()

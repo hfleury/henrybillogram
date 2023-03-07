@@ -8,26 +8,26 @@ import (
 	"github.com/hfleury/henrybillogram/internal/app"
 )
 
-type DiscounteRouter struct {
-	appDiscount *app.AppDiscount
+type BlgRouter struct {
+	appBlgRouter *app.AppBillogram
 }
 
-func NewDiscounteRouter(
-	appDiscount *app.AppDiscount,
-) *DiscounteRouter {
-	return &DiscounteRouter{
-		appDiscount: appDiscount,
+func NewBlgRouter(
+	appBlgRouter *app.AppBillogram,
+) *BlgRouter {
+	return &BlgRouter{
+		appBlgRouter: appBlgRouter,
 	}
 }
 
-func (hr *DiscounteRouter) ConfigRouter() *gin.Engine {
+func (hr *BlgRouter) ConfigRouter() *gin.Engine {
 	// Recovery middleware recovers from any panics and writes a 500 if there was one.
-	hr.appDiscount.GinEngine.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
+	hr.appBlgRouter.GinEngine.Use(gin.CustomRecovery(func(c *gin.Context, recovered interface{}) {
 		if err, ok := recovered.(string); ok {
 			c.String(http.StatusInternalServerError, fmt.Sprintf("error: %s", err))
 		}
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
 
-	return hr.appDiscount.GinEngine
+	return hr.appBlgRouter.GinEngine
 }
