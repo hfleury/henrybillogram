@@ -39,8 +39,10 @@ func TestMain(m *testing.M) {
 	blgRouter := internal.NewBlgRouter(appBlg)
 	ginEngine = blgRouter.ConfigRouter()
 	dscRepo := repo.NewDiscountBrandRepo(dbConn)
+	dscUserRepo := repo.NewDiscountUserRepo(dbConn)
 	dscService := service.NewDiscountBrandService(*dscRepo)
-	dscHandler := NewDiscountHandler(dscService)
+	dscUserService := service.NewDiscountUserService(*dscUserRepo)
+	dscHandler := NewDiscountHandler(dscService, dscUserService)
 	dscRouter := NewDiscountRouter(appBlg, dscHandler)
 	dscRouter.SetDiscountRouters()
 
