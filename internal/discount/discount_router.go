@@ -27,4 +27,9 @@ func (dr *DiscountRouter) SetDiscountRouters() {
 	{
 		branGroup.POST("/discount", dr.discountHandler.CreateBrandDiscountHandler)
 	}
+
+	userGroup := dr.appBlgRouter.GinEngine.Group("/user")
+	{
+		userGroup.GET("/discount", dr.discountHandler.CreateUserDiscountHandler)
+	}
 }

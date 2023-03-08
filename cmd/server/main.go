@@ -42,12 +42,14 @@ func main() {
 
 	// Init Repo
 	dscRepo := repo.NewDiscountBrandRepo(db)
+	dscUserRepo := repo.NewDiscountUserRepo(db)
 
 	// Ini Services
 	dscService := service.NewDiscountBrandService(*dscRepo)
+	dscServiceUser := service.NewDiscountUserService(*dscUserRepo)
 
 	// Init Handlers
-	dscHandler := discount.NewDiscountHandler(dscService)
+	dscHandler := discount.NewDiscountHandler(dscService, dscServiceUser)
 
 	// Init and config router
 	blgRouter := internal.NewBlgRouter(appBlg)

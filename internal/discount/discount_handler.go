@@ -11,14 +11,17 @@ import (
 )
 
 type DiscountHandler struct {
-	discountService *service.DiscountBrandService
+	discountBrandService *service.DiscountBrandService
+	discountUserService  *service.DiscountUserService
 }
 
 func NewDiscountHandler(
-	discountService *service.DiscountBrandService,
+	discountBrandService *service.DiscountBrandService,
+	discountUserService *service.DiscountUserService,
 ) *DiscountHandler {
 	return &DiscountHandler{
-		discountService: discountService,
+		discountBrandService: discountBrandService,
+		discountUserService:  discountUserService,
 	}
 }
 
@@ -39,7 +42,26 @@ func (dh *DiscountHandler) CreateBrandDiscountHandler(c *gin.Context) {
 	reqBrandDiscount.BrandId = brandId
 	reqBrandDiscount.BrandName = c.GetHeader("Blg-Brand-Name")
 
-	dh.discountService.CreateDiscount(reqBrandDiscount)
+	dh.discountBrandService.CreateDiscount(reqBrandDiscount)
 
 	c.Writer.WriteHeader(200)
+}
+
+func (dh *DiscountHandler) CreateUserDiscountHandler(c *gin.Context) {
+	var reqUserDiscount discount.RequestUserDiscount
+
+	userId, err := strconv.Atoi(c.GetHeader("Blg-User-Id"))
+	if err != nil {
+		c.Writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	reqUserDiscount.UserId = userId
+
+	rntReq, err := dh.discountUserService.FetchByUserId(reqUserDiscount)
+	if err != nil {
+		c.Writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	c.IndentedJSON(http.StatusOK, rntReq)
 }
